@@ -1,18 +1,30 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import SecondsCounter from "/src/js/components/Home.jsx";
+import "/src/styles/index.css";
 
-//Bootstrap
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap"
+function App() {
+  const [seconds, setSeconds] = React.useState(0);
 
-// index.css'
-import '../styles/index.css'
+  React.useEffect(() => {
+    function handleLoad() {
+      setSeconds(0);
+      const interval = setInterval(() => {
+        setSeconds((sec) => sec + 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+    if (document.readyState === "complete") {
+      handleLoad();
+    } else {
+      window.addEventListener("load", handleLoad);
+      return () => window.removeEventListener("load", handleLoad);
+    }
+  }, []);
 
-// components
-import Home from './components/Home';
+  return <SecondsCounter seconds={seconds} />;
+}
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <Home/>
-  </React.StrictMode>,
-)
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+
